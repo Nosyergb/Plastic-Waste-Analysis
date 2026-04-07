@@ -3,3 +3,37 @@ title: "Project 1 Checkpoint 1"
 format: html
 ---
 
+```{r}
+install.packages("tidytuesdayR")
+library(tidyverse)
+```
+
+```{r}
+#| label: load_data
+tuesdata <- tidytuesdayR::tt_load('2021-01-26')
+plastics <- tuesdata$plastics
+```
+
+# Context
+
+This dataset is describing the different sources of plastic pollution and where they come from in different cities. Researchers found this data in a blog post from Break Free From Plastic (BFFP). The plastic is described by different recycling codes such as pet (polyester plastic count), ldpe (Low density polyethylene count), etc.
+
+# Cleaning
+
+The columns in the data frame have been assigned different classes, specifically character and double. The janitor package is used to clean the names of the columns. The rows from the 2019 and 2020 datasets were also combined.
+
+# Research Questions (Primary Data)
+
+1.  Has the output of different plastics changed dramatically from 2019 to 2020?
+2.  Which parent company produces the most plastic pollution?
+
+# Research Questions (Supplemental Data)
+
+1.  What is the most common source of plastic pollution in cities from 2019 to 2020?
+2.  Where does the most plastic pollution come from?
+
+# Visualizations
+
+![](/Users/nosyergb/STAT%20431/Project%201/Untitled-2026-04-06-1720.png)
+
+![](/Users/nosyergb/STAT%20431/Project%201/Untitled-2026-04-06-1720-3.png)
