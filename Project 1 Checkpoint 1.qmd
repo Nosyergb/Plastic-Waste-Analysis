@@ -34,6 +34,6 @@ The columns in the data frame have been assigned different classes, specifically
 
 # Visualizations
 
-![](/Users/nosyergb/STAT%20431/Project%201/Untitled-2026-04-06-1720.png)
+![](Untitled-2026-04-06-1720.png)
 
-![](/Users/nosyergb/STAT%20431/Project%201/Untitled-2026-04-06-1720-3.png)
+![](Untitled-2026-04-06-1720-3.png)
