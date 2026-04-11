@@ -56,7 +56,7 @@ calc_plastic_difference <- function(data) {
 
 plastics_diff <- calc_plastic_difference(plastics)
 
-#Which companies increased or decreased their plastic waste contribution from 2019 to 2020 in each country?
+#Which companies increased or decreased their plastic waste contribution from 2019 to 2020?
 company_results <- plastics |>
   split(plastics$parent_company) |>
   map(~ .x |>
