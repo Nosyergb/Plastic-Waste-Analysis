@@ -13,30 +13,35 @@ library(tidyverse)
 tuesdata <- tidytuesdayR::tt_load('2021-01-26')
 plastics <- tuesdata$plastics
 ```
+
 ```{r}
 install.packages("purrr")
 library(purrr)
 
+#Is there a relationship between the number of volunteers and the amount of plastic produced across countries?
 summ_plastics <- function(data) {
   data |>
     group_by(country) |>
     summarize(
       total_plastic = sum(grand_total, na.rm = TRUE),
       total_volunteers = sum(volunteers, na.rm = TRUE),
+      .groups = "drop"
     ) |>
     summarize(
       correlation = cor(total_volunteers, total_plastic, use = "complete.obs")
-    )
+  )
 }
 
 volunteers <- summ_plastics(plastics)
 
+#Does the relationship between volunteers and plastic production change over time?
 volunteer_results <- plastics |>
   split(plastics$year) |>
   map(summ_plastics) |>
   bind_rows(.id = "year")
 
-calculate_plastic_difference <- function(data) {
+#How did plastic production change between 2019 and 2020 for each country?
+calc_plastic_difference <- function(data) {
   data |>
     group_by(country) |>
     summarize(
@@ -49,12 +54,19 @@ calculate_plastic_difference <- function(data) {
     )
 }
 
-plastics_diff <- calculate_plastic_difference(plastics)
+plastics_diff <- calc_plastic_difference(plastics)
 
-plastics_diff_results <- plastics |>
-  split(plastics$country) |>
-  map(calculate_plastic_difference) |>
-  bind_rows(.id = "country")
+#Which companies increased or decreased their plastic waste contribution from 2019 to 2020 in each country?
+company_results <- plastics |>
+  split(plastics$parent_company) |>
+  map(~ .x |>
+        summarize(
+          plastic_2019 = sum(grand_total[year == 2019], na.rm = TRUE),
+          plastic_2020 = sum(grand_total[year == 2020], na.rm = TRUE)
+        ) |>
+        mutate(difference = plastic_2020 - plastic_2019)
+  ) |>
+  bind_rows(.id = "parent_company")
 ```
 
 ```{r}
