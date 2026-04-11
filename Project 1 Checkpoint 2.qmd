@@ -1,0 +1,60 @@
+---
+title: "Project 1 Checkpoint 2"
+format: html
+---
+
+```{r}
+install.packages("tidytuesdayR")
+library(tidyverse)
+```
+
+```{r}
+#| label: load_data
+tuesdata <- tidytuesdayR::tt_load('2021-01-26')
+plastics <- tuesdata$plastics
+```
+```{r}
+install.packages("purrr")
+library(purrr)
+
+summ_plastics <- function(data) {
+  data |>
+    group_by(country) |>
+    summarize(
+      total_plastic = sum(grand_total, na.rm = TRUE),
+      total_volunteers = sum(volunteers, na.rm = TRUE),
+    ) |>
+    summarize(
+      correlation = cor(total_volunteers, total_plastic, use = "complete.obs")
+    )
+}
+
+volunteers <- summ_plastics(plastics)
+
+volunteer_results <- plastics |>
+  split(plastics$year) |>
+  map(summ_plastics) |>
+  bind_rows(.id = "year")
+
+calculate_plastic_difference <- function(data) {
+  data |>
+    group_by(country) |>
+    summarize(
+      plastic_2019 = sum(grand_total[year == 2019], na.rm = TRUE),
+      plastic_2020 = sum(grand_total[year == 2020], na.rm = TRUE),
+      .groups = "drop"
+    ) |>
+    mutate(
+      difference = plastic_2020 - plastic_2019
+    )
+}
+
+plastics_diff <- calculate_plastic_difference(plastics)
+
+plastics_diff_results <- plastics |>
+  split(plastics$country) |>
+  map(calculate_plastic_difference) |>
+  bind_rows(.id = "country")
+```
+
+```{r}
