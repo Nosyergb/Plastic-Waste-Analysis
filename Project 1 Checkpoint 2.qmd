@@ -68,5 +68,3 @@ company_results <- plastics |>
   ) |>
   bind_rows(.id = "parent_company")
 ```
-
-```{r}
